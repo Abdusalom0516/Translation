@@ -11,10 +11,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
     return AppStateWrapper(
       builder: (ref, colors) => Scaffold(
         appBar: AppBar(
           title: Text("Language Translator"),
+          centerTitle: true,
         ),
         body: CustomScrollView(
           slivers: [
@@ -136,6 +138,32 @@ class HomeScreen extends StatelessWidget {
                                 )
                               ],
                             ),
+                            Expanded(
+                              child: TextField(
+                                controller: controller,
+                                maxLines: 3,
+                                cursorColor: colors.blue,
+                                style: TextStyle(
+                                  color: colors.blue.withValues(alpha: 0.6),
+                                  fontSize: appW(15),
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.none,
+                                  decorationColor: Colors.transparent,
+                                  decorationThickness: 0,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: "Enter text here...",
+                                  hintStyle: TextStyle(
+                                    color: colors.blue.withValues(alpha: 0.6),
+                                    fontSize: appW(15),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -163,7 +191,49 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
+            SliverToBoxAdapter(
+              child: h(25),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                horizontal: appW(20),
+              ),
+              sliver: SliverFillRemaining(
+                child: Card(
+                  elevation: appW(3.9),
+                  shadowColor: colors.blue.withValues(alpha: 0.3),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(appW(16)),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(appW(16)),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "English",
+                              style: TextStyle(
+                                color: colors.blue,
+                                fontSize: appW(17),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: h(35),
+            ),
           ],
         ),
       ),
