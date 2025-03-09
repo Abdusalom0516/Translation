@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:translation/core/common/widgets/sizedbox.dart';
 import 'package:translation/core/utils/app_responsive.dart';
 import 'package:translation/core/utils/app_state_wrapper.dart';
+import 'package:translation/core/utils/clipboard.dart';
 import 'package:translation/providers/translation_words_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -171,7 +172,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    controller.clear();
+                                    ref
+                                        .read(translationWordsProvider.notifier)
+                                        .clean();
+                                  },
                                   child: Icon(
                                     Icons.close_rounded,
                                     color: colors.blue,
@@ -330,7 +336,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      // Using Clipboard Package to Copy the Translated Sentance/Word.
+                                      Clipboard.copy(
+                                        ref.watch(translationWordsProvider)!,
+                                      );
+                                    },
                                     child: Icon(
                                       Icons.copy_rounded,
                                       color: colors.blue,
