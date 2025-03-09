@@ -39,11 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: appW(11),
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Language Translator"),
               Icon(
                 Icons.translate_rounded,
                 size: appW(27),
-              )
+              ),
+              Text("Translator"),
             ],
           ),
           centerTitle: true,
@@ -81,12 +81,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               onPressed: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LanguagesScreen(
-                                        from: true,
-                                      ),
-                                    ));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LanguagesScreen(
+                                      from: true,
+                                    ),
+                                  ),
+                                );
+                                // FocusScope.of(context).unfocus();
+                                // controller.clear();
                               },
                               child: Row(
                                 spacing: appW(9),
@@ -110,7 +113,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                String to = ref.watch(toProvider);
+                                ref
+                                    .read(toProvider.notifier)
+                                    .changeLanguageCode(
+                                      newLangCode: ref.watch(fromProvider),
+                                    );
+                                ref
+                                    .read(fromProvider.notifier)
+                                    .changeLanguageCode(newLangCode: to);
+                              },
                               color: colors.blue,
                               icon: Icon(
                                 Icons.swap_horiz_rounded,
@@ -125,10 +138,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               onPressed: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LanguagesScreen(),
-                                    ));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LanguagesScreen(),
+                                  ),
+                                );
+                                // FocusScope.of(context).unfocus();
+                                // controller.clear();
                               },
                               child: Row(
                                 spacing: appW(9),
