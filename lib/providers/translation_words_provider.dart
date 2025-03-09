@@ -10,7 +10,13 @@ class TranslationWordsProvider extends StateNotifier<String?> {
     Translation result = await translator.translate(word, from: from, to: to);
     state = result.text;
   }
+
+  void clean() async {
+    state = "";
+  }
 }
 
-
-final translationWordsProvider = StateNotifierProvider<TranslationWordsProvider, String?>((ref) => TranslationWordsProvider(),);
+final translationWordsProvider =
+    StateNotifierProvider<TranslationWordsProvider, String?>(
+  (ref) => TranslationWordsProvider(),
+);
