@@ -2,9 +2,14 @@ import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:translation/core/common/widgets/sizedbox.dart';
+import 'package:translation/core/constants/country_codes.dart';
+import 'package:translation/core/constants/country_languages.dart';
 import 'package:translation/core/utils/app_responsive.dart';
 import 'package:translation/core/utils/app_state_wrapper.dart';
 import 'package:translation/core/utils/clipboard.dart';
+import 'package:translation/presentation/home/languages_screen.dart';
+import 'package:translation/providers/from_provider.dart';
+import 'package:translation/providers/to_provider.dart';
 import 'package:translation/providers/translation_words_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -68,24 +73,41 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              spacing: appW(9),
-                              children: [
-                                CountryFlag.fromCountryCode(
-                                  "US",
-                                  height: appH(27),
-                                  width: appW(27),
-                                  shape: Circle(),
-                                ),
-                                Text(
-                                  "English",
-                                  style: TextStyle(
-                                    color: colors.blue,
-                                    fontSize: appW(17),
-                                    fontWeight: FontWeight.w600,
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LanguagesScreen(
+                                        from: true,
+                                      ),
+                                    ));
+                              },
+                              child: Row(
+                                spacing: appW(9),
+                                children: [
+                                  CountryFlag.fromCountryCode(
+                                    countryCodes[ref.watch(fromProvider)]!,
+                                    height: appH(27),
+                                    width: appW(27),
+                                    shape: Circle(),
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    countryLanguages[countryCodes[
+                                        ref.watch(fromProvider)]!]!,
+                                    style: TextStyle(
+                                      color: colors.blue,
+                                      fontSize: appW(17),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             IconButton(
                               onPressed: () {},
@@ -95,24 +117,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: appW(25),
                               ),
                             ),
-                            Row(
-                              spacing: appW(9),
-                              children: [
-                                Text(
-                                  "Uzbek",
-                                  style: TextStyle(
-                                    color: colors.blue,
-                                    fontSize: appW(17),
-                                    fontWeight: FontWeight.w600,
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LanguagesScreen(),
+                                    ));
+                              },
+                              child: Row(
+                                spacing: appW(9),
+                                children: [
+                                  Text(
+                                    countryLanguages[
+                                        countryCodes[ref.watch(toProvider)]!]!,
+                                    style: TextStyle(
+                                      color: colors.blue,
+                                      fontSize: appW(17),
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                CountryFlag.fromCountryCode(
-                                  "UZ",
-                                  height: appH(27),
-                                  width: appW(27),
-                                  shape: Circle(),
-                                ),
-                              ],
+                                  CountryFlag.fromCountryCode(
+                                    countryCodes[ref.watch(toProvider)]!,
+                                    height: appH(27),
+                                    width: appW(27),
+                                    shape: Circle(),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -144,7 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     spacing: appW(11),
                                     children: [
                                       Text(
-                                        "English",
+                                        countryLanguages[countryCodes[
+                                            ref.watch(fromProvider)]!]!,
                                         style: TextStyle(
                                           color: colors.blue,
                                           fontSize: appW(17),
@@ -228,8 +266,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .read(
                                               translationWordsProvider.notifier)
                                           .translate(
-                                            "en",
-                                            "uz",
+                                            ref.watch(fromProvider),
+                                            ref.watch(toProvider),
                                             controller.text.trim(),
                                           );
                                     },
@@ -280,7 +318,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Uzbek",
+                                    countryLanguages[
+                                        countryCodes[ref.watch(toProvider)]!]!,
                                     style: TextStyle(
                                       color: colors.blue,
                                       fontSize: appW(17),
@@ -384,18 +423,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ],
                                     )
-                                  : Text(
-                                      textAlign: TextAlign.start,
-                                      ref
+                                  : ref
                                           .watch(translationWordsProvider)
-                                          .value!,
-                                      style: TextStyle(
-                                        color:
-                                            colors.blue.withValues(alpha: 0.6),
-                                        fontSize: appW(15),
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
+                                          .value!
+                                          .isEmpty
+                                      ? Text(
+                                          textAlign: TextAlign.start,
+                                          "...",
+                                          style: TextStyle(
+                                            color: colors.blue
+                                                .withValues(alpha: 0.6),
+                                            fontSize: appW(15),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        )
+                                      : Text(
+                                          textAlign: TextAlign.start,
+                                          ref
+                                              .watch(translationWordsProvider)
+                                              .value!,
+                                          style: TextStyle(
+                                            color: colors.blue
+                                                .withValues(alpha: 0.6),
+                                            fontSize: appW(15),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
                               h(15),
                               Row(
                                 spacing: appW(11),
