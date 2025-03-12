@@ -4,6 +4,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:translation/core/common/widgets/sizedbox.dart';
 import 'package:translation/core/constants/country_codes.dart';
 import 'package:translation/core/constants/country_languages.dart';
+import 'package:translation/core/constants/full_lang_and_country_code.dart';
+import 'package:translation/core/services/text_to_speach.dart';
 import 'package:translation/core/utils/app_responsive.dart';
 import 'package:translation/core/utils/app_state_wrapper.dart';
 import 'package:translation/core/utils/clipboard.dart';
@@ -212,7 +214,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           tapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          await TextToSpeachService().speak(
+                                            controller.text.trim(),
+                                            FullLangAndCountryCode()
+                                                    .fullLangAndCountryCode[
+                                                ref.watch(fromProvider)]!,
+                                          );
+                                        },
                                         child: Icon(
                                           Icons.volume_up_rounded,
                                           color: colors.blue,
@@ -349,7 +358,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       tapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      await TextToSpeachService().speak(
+                                        ref
+                                                .watch(translationWordsProvider)
+                                                .value ??
+                                            "...",
+                                        FullLangAndCountryCode()
+                                                .fullLangAndCountryCode[
+                                            ref.watch(toProvider)]!,
+                                      );
+                                    },
                                     child: Icon(
                                       Icons.volume_up_rounded,
                                       color: colors.blue,
