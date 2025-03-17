@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:translation/core/utils/app_responsive.dart';
 import 'package:translation/core/utils/app_state_wrapper.dart';
-import 'package:translation/presentation/splash/splash_screen.dart';
+import 'package:translation/presentation/home/home_screen.dart';
 
 void main() {
   runApp(
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return AppStateWrapper(
       builder: (ref, colors) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: HomeScreen(),
         theme: ThemeData(
           splashFactory: NoSplash.splashFactory,
           splashColor: colors.bg,
